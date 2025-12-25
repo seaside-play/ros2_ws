@@ -15,6 +15,33 @@ find_package(ament_cmake REQUIRED)
 # find_package(<dependency> REQUIRED)
 
 find_package(rclcpp REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(turtlesim REQUIRED)
+find_package(status_interfaces REQUIRED)
+find_package(Qt5 REQUIRED COMPONENTS Widgets)
+
+add_executable(cpp_node src/person_node.cpp)
+add_executable(turtle_circle src/turtle_circle.cpp)
+add_executable(turtle_control src/turtle_control.cpp)
+add_executable(hello_qt src/hello_qt.cpp)
+add_executable(sys_status_display src/sys_status_display.cpp)
+
+target_link_libraries(hello_qt Qt5::Widgets)
+target_link_libraries(sys_status_display Qt5::Widgets)
+
+ament_target_dependencies(cpp_node rclcpp)
+ament_target_dependencies(turtle_circle rclcpp geometry_msgs turtlesim )
+ament_target_dependencies(turtle_control rclcpp geometry_msgs turtlesim )
+ament_target_dependencies(sys_status_display rclcpp status_interfaces)
+
+install(TARGETS
+cpp_node
+turtle_circle
+turtle_control
+hello_qt
+sys_status_display
+DESTINATION lib/${PROJECT_NAME}
+)
 
 # find_package(MRPT 2.0 REQUIRED COMPONENTS
 #   core       # 核心功能
@@ -31,8 +58,6 @@ find_package(rclcpp REQUIRED)
 #   message(WARNING "MRPT 沒有找到")
 # endif()
 
-add_executable(cpp_node src/person_node.cpp)
-
 # target_link_libraries(cpp_node
 #   MRPT::core
 #   MRPT::slam
@@ -42,12 +67,6 @@ add_executable(cpp_node src/person_node.cpp)
 # )
 
 # 链接依赖（ROS 2 + MRPT2）
-ament_target_dependencies(cpp_node rclcpp)
-
-install(TARGETS
-cpp_node
-DESTINATION lib/${PROJECT_NAME}
-)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

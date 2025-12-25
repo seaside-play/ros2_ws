@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>status_interfaces</name>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="namtaerg@gmail.com">chris</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <!-- ROS 2 中已有的一个消息接口功能包，该功能包下提供Time等类型 -->
+  <depend>buildtin_interfaces</depend>
+  <!-- 将自定义的消息文件转化为C++，python源码的模块 -->
+  <depend>rosidl_default_generators</depend> 
+
+  <!-- 将当前包标记为「ROS IDL 接口包」—— 即仅包含消息（.msg）、服务（.srv）、动作（.action）定义的包（无源码 / 可执行文件），
+  是 ROS 2 构建系统识别接口包的关键配置。 -->
+  <member_of_group>rosidl_interface_packages</member_of_group>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

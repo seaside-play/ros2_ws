@@ -24,6 +24,7 @@ setup(
             'python_node = demo_python_pkg.python_node:main',
             'novel_pub = demo_python_pkg.novel_pub_node:main',
             'novel_read = demo_python_pkg.novel_sub_node:main',
+            'sys_status_pub = demo_python_pkg.sys_status_pub:main',
         ],
     },
 )
