@@ -1,9 +1,12 @@
+#include <cmath>
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 #include "turtlesim/msg/pose.hpp"
 #include <geometry_msgs/msg/twist.hpp>
 #include <turtlesim/msg/pose.hpp>
-#include <cmath>
+#include "image_interfaces/srv/patrol.hpp"
+
+using Patrol = image_interfaces::srv::Patrol;
 
 class TurtleControl : public rclcpp::Node {
 public:
@@ -11,10 +14,23 @@ public:
         velocity_publisher_ = create_publisher<geometry_msgs::msg::Twist>("/turtle1/cmd_vel", 10);
         pose_subscription_ = create_subscription<turtlesim::msg::Pose>("/turtle1/pose", 10, 
                                                              std::bind(&TurtleControl::on_pose_received, this, std::placeholders::_1));
+        patrol_server_ = create_service<Patrol>("patrol",
+                                                [&](const std::shared_ptr<Patrol::Request> request, 
+                                                              std::shared_ptr<Patrol::Response> response) -> void {
+                                                    // 判断巡逻点是否在模拟器边界内
+                                                    if ((0 < request->target_x && request->target_x < 12.0f) && (0 < request->target_y && request->target_y < 12.0f)) {
+                                                        target_x_ = request->target_x;
+                                                        target_y_ = request->target_y;
+                                                        response->result = Patrol::Response::SUCCESS;
+                                                    } else {
+                                                        response->result = Patrol::Response::FAIL;
+                                                    }
+                                                });
+        
     }
 
+    // 收到位置计算误差，发布速度指令
     void on_pose_received(const turtlesim::msg::Pose::SharedPtr pose) {
-        // TODO: 收到位置计算误差，发布速度指令
         auto msg = geometry_msgs::msg::Twist();
         
         // 1. 记录当前位置
@@ -52,6 +68,8 @@ private:
     double target_y_{8.0};
     double k_{1.0}; // 比例系数，控制输出=误差*比例系数
     double max_speed_{3.0}; // 最大线速度，设置默认值为3.0
+
+    rclcpp::Service<Patrol>::SharedPtr patrol_server_;
 };
 
 int main(int argc, char* argv[]) {

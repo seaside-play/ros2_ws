@@ -18,6 +18,7 @@ find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(turtlesim REQUIRED)
 find_package(status_interfaces REQUIRED)
+find_package(image_interfaces REQUIRED) # 接口功能包中可以有多个接口类型
 find_package(Qt5 REQUIRED COMPONENTS Widgets)
 
 add_executable(cpp_node src/person_node.cpp)
@@ -25,14 +26,16 @@ add_executable(turtle_circle src/turtle_circle.cpp)
 add_executable(turtle_control src/turtle_control.cpp)
 add_executable(hello_qt src/hello_qt.cpp)
 add_executable(sys_status_display src/sys_status_display.cpp)
+add_executable(patrol_client src/patrol_client.cpp)
 
 target_link_libraries(hello_qt Qt5::Widgets)
 target_link_libraries(sys_status_display Qt5::Widgets)
 
 ament_target_dependencies(cpp_node rclcpp)
 ament_target_dependencies(turtle_circle rclcpp geometry_msgs turtlesim )
-ament_target_dependencies(turtle_control rclcpp geometry_msgs turtlesim )
+ament_target_dependencies(turtle_control rclcpp geometry_msgs turtlesim image_interfaces)
 ament_target_dependencies(sys_status_display rclcpp status_interfaces)
+ament_target_dependencies(patrol_client rclcpp geometry_msgs turtlesim image_interfaces)
 
 install(TARGETS
 cpp_node
@@ -40,6 +43,7 @@ turtle_circle
 turtle_control
 hello_qt
 sys_status_display
+patrol_client
 DESTINATION lib/${PROJECT_NAME}
 )
 

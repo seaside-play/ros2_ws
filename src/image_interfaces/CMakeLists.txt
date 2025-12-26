@@ -15,6 +15,7 @@ find_package(sensor_msgs REQUIRED)
 # 服务接口文件就是使用C++代码的形式了
 rosidl_generate_interfaces(${PROJECT_NAME}
 "srv/FaceDetector.srv"
+"srv/Patrol.srv"
 DEPENDENCIES sensor_msgs
 )
 
