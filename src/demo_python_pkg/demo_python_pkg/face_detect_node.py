@@ -8,6 +8,7 @@ import cv2
 import face_recognition
 import time
 import os
+from rcl_interfaces.msg import SetParametersResult
 
 class FaceDectectionNode(Node):
     def __init__(self):
@@ -22,8 +23,25 @@ class FaceDectectionNode(Node):
             print(f"错误：图片文件不存在 → {self.default_image_path_}")
             return
         
-        self.upsample_times_ = 1 # 默认采样次数
-        self.model_ = 'cnn' #'hog' # 默认模型
+        # 声明参数和获取参数
+        self.declare_parameter('face_locations_upsample_times', 1)
+        self.declare_parameter('face_locations_model', "hog")
+        # self.upsample_times_ = 1 # 默认采样次数
+        # self.model_ = 'cnn' #'hog' # 默认模型
+        self.upsample_times_ = self.get_parameter('face_locations_upsample_times').value
+        self.model_ = self.get_parameter('face_locations_model').value
+
+        # 添加参数更新回调
+        self.add_on_set_parameters_callback(self.parameter_callback)
+
+    def parameter_callback(self, parameters):
+        for parameter in parameters:
+            self.get_logger().info(f'参数{parameter.name} 设置为： {parameter.value}')
+            if parameter.name == 'face_locations_upsample_times':
+                self.upsample_times_ = parameter.value
+            if parameter.name == 'face_locations_model':
+                self.model_ = parameter.value
+        return SetParametersResult(successful=True)
 
     # 完成人脸检测
     def detect_face_callback(self, request, response):

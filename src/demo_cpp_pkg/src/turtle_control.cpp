@@ -3,14 +3,45 @@
 #include "geometry_msgs/msg/twist.hpp"
 #include "turtlesim/msg/pose.hpp"
 #include <geometry_msgs/msg/twist.hpp>
+#include <rcl_interfaces/msg/detail/set_parameters_result__struct.hpp>
+#include <rclcpp/parameter.hpp>
 #include <turtlesim/msg/pose.hpp>
 #include "image_interfaces/srv/patrol.hpp"
+#include "rcl_interfaces/msg/set_parameters_result.hpp"
 
 using Patrol = image_interfaces::srv::Patrol;
+using SetParametersResult = rcl_interfaces::msg::SetParametersResult;
 
 class TurtleControl : public rclcpp::Node {
 public:
     TurtleControl() : Node("turtle_controller") {
+        //20251229. 001 声明和获取参数值
+        this->declare_parameter("k_", 1.0);
+        this->declare_parameter("max_speed_", 1.0);
+        this->get_parameter("k_", k_);
+        this->get_parameter("max_speed_", max_speed_);
+
+        // 该回调函数为客户端请求时的，服务端处理的函数
+        parameters_callback_handler_ = this->add_on_set_parameters_callback(
+            [&](const std::vector<rclcpp::Parameter>& params) -> SetParametersResult {
+            // 遍历参数
+            for (const auto& param : params) {
+                RCLCPP_INFO(this->get_logger(), 
+                            "更新参数 %s 值为： %f", 
+                            param.get_name().c_str(),
+                            param.as_double());
+                if (param.get_name() == "k_") {
+                    k_ = param.as_double();
+                } else if (param.get_name() == "max_speed") {
+                    max_speed_ = param.as_double();
+                }
+            }
+            auto result = SetParametersResult();
+            result.successful = true;
+            return result;
+        });
+        //20251229. End
+
         velocity_publisher_ = create_publisher<geometry_msgs::msg::Twist>("/turtle1/cmd_vel", 10);
         pose_subscription_ = create_subscription<turtlesim::msg::Pose>("/turtle1/pose", 10, 
                                                              std::bind(&TurtleControl::on_pose_received, this, std::placeholders::_1));
@@ -70,11 +101,16 @@ private:
     double max_speed_{3.0}; // 最大线速度，设置默认值为3.0
 
     rclcpp::Service<Patrol>::SharedPtr patrol_server_;
+
+    //20251229. 002: 订阅话题接收参数更新事件
+    OnSetParametersCallbackHandle::SharedPtr parameters_callback_handler_;
+    //20251229. End
 };
 
 int main(int argc, char* argv[]) {
     rclcpp::init(argc, argv);
     auto node = std::make_shared<TurtleControl>();
+    node->set_parameter(rclcpp::Parameter("k_", 3.0));
     rclcpp::spin(node);
     rclcpp::shutdown();
 }
