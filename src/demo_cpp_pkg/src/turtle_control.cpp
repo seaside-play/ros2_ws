@@ -32,7 +32,7 @@ public:
                             param.as_double());
                 if (param.get_name() == "k_") {
                     k_ = param.as_double();
-                } else if (param.get_name() == "max_speed") {
+                } else if (param.get_name() == "max_speed_") {
                     max_speed_ = param.as_double();
                 }
             }

@@ -1,4 +1,5 @@
 from setuptools import find_packages, setup
+from glob import glob
 
 package_name = 'demo_python_pkg'
 
@@ -12,6 +13,7 @@ setup(
         # 目标路径，源文件路径， 编译时为创建目标路径，并将源文件路径上的文件复制到目标路径中
         # resource/default.jpeg仅仅是指明源文件的路径，而拷贝的只是defautl.jpeg文件到目标文件夹下
         ('share/' + package_name + "/resource", ['resource/default.jpeg', 'resource/test1.jpeg']), 
+        ('share/' + package_name + "/launch", glob('launch/*.launch.py')), # 通过正则匹配所有文件
     ],
     install_requires=['setuptools'],
     zip_safe=True,

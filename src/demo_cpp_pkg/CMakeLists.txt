@@ -38,13 +38,19 @@ ament_target_dependencies(sys_status_display rclcpp status_interfaces)
 ament_target_dependencies(patrol_client rclcpp geometry_msgs turtlesim image_interfaces)
 
 install(TARGETS
-cpp_node
-turtle_circle
-turtle_control
-hello_qt
-sys_status_display
-patrol_client
-DESTINATION lib/${PROJECT_NAME}
+  cpp_node
+  turtle_circle
+  turtle_control
+  hello_qt
+  sys_status_display
+  patrol_client
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# 将lauch目录赋值到install目录中对应功能包的share目录下，这样在运行时才能找到对应文件
+install(DIRECTORY 
+  launch
+  DESTINATION share/${PROJECT_NAME}
 )
 
 # find_package(MRPT 2.0 REQUIRED COMPONENTS
