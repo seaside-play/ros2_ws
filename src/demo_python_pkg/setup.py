@@ -33,7 +33,9 @@ setup(
             'learn_face_detect = demo_python_pkg.learn_face_detect:main',
             'face_detect_node = demo_python_pkg.face_detect_node:main',
             'face_detect_client_node = demo_python_pkg.face_detect_client_node:main',
-            'static_tf_broadcaster = demo_python_pkg.static_tf_broadcaster:main',
+            'tf_broadcaster_static = demo_python_pkg.tf_broadcaster_static:main',
+            'tf_broadcaster_dynamic = demo_python_pkg.tf_broadcaster_dynamic:main',
+            'tf_listener = demo_python_pkg.tf_listener:main',
         ],
     },
 )

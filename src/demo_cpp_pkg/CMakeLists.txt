@@ -21,12 +21,25 @@ find_package(status_interfaces REQUIRED)
 find_package(image_interfaces REQUIRED) # 接口功能包中可以有多个接口类型
 find_package(Qt5 REQUIRED COMPONENTS Widgets)
 
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+
 add_executable(cpp_node src/person_node.cpp)
 add_executable(turtle_circle src/turtle_circle.cpp)
 add_executable(turtle_control src/turtle_control.cpp)
 add_executable(hello_qt src/hello_qt.cpp)
 add_executable(sys_status_display src/sys_status_display.cpp)
 add_executable(patrol_client src/patrol_client.cpp)
+
+add_executable(tf_broadcaster_static src/tf_broadcaster_static.cpp)
+ament_target_dependencies(tf_broadcaster_static rclcpp geometry_msgs tf2 tf2_ros tf2_geometry_msgs)
+
+add_executable(tf_broadcaster_dynamic src/tf_broadcaster_dynamic.cpp)
+ament_target_dependencies(tf_broadcaster_dynamic rclcpp geometry_msgs tf2 tf2_ros tf2_geometry_msgs)
+
+add_executable(tf_listener src/tf_listener.cpp)
+ament_target_dependencies(tf_listener rclcpp geometry_msgs tf2 tf2_ros tf2_geometry_msgs)
 
 target_link_libraries(hello_qt Qt5::Widgets)
 target_link_libraries(sys_status_display Qt5::Widgets)
@@ -44,6 +57,9 @@ install(TARGETS
   hello_qt
   sys_status_display
   patrol_client
+  tf_broadcaster_static
+  tf_broadcaster_dynamic
+  tf_listener
   DESTINATION lib/${PROJECT_NAME}
 )
 

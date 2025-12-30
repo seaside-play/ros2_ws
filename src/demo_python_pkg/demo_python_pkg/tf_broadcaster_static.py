@@ -7,7 +7,7 @@ from tf_transformations import quaternion_from_euler
 
 class StaticTFBroadcaster(Node):
     def __init__(self):
-        super().__init__('static_tf2_broadcaster')
+        super().__init__('tf_broadcaster_static')
         self.static_broadcaster_ = StaticTransformBroadcaster(self)
         self.publish_static_tf()
 

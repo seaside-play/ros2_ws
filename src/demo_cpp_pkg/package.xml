@@ -13,6 +13,10 @@
   <depend>status_interfaces</depend>
   <depend>image_interfaces</depend>
 
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_geometry_msgs</depend>
+
   <!-- MRPT2 依赖（告诉 colcon 编译时需要 MRPT2） -->
   <build_depend>MRPT</build_depend>
   <exec_depend>MRPT</exec_depend>

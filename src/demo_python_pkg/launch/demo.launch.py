@@ -7,40 +7,60 @@ from launch.conditions import IfCondition
 # from launch.substitutions import LaunchConfiguration
 
 def generate_launch_description():
-    # 功能三： 结合替换来学习条件
-    # 1. 声明参数，是否创建新的海龟
-    declare_spawn_turtle = launch.actions.DeclareLaunchArgument(
-        'spawn_turtle', default_value='false', description='是否生成海龟(true/false)'
+    # 功能四： 执行tf的静态发布和动态发布，之后再执行TF监听
+    tf_broadcaster_static = launch_ros.actions.Node(
+        package='demo_python_pkg',
+        executable='tf_broadcaster_static',
+        output='log',
     )
-    spawn_turtle = launch.substitutions.LaunchConfiguration('spawn_turtle')
-    print(f'spawn_turtle {spawn_turtle} {IfCondition(spawn_turtle)}')
-    action_turtlesim = launch_ros.actions.Node(
-        package='turtlesim', executable='turtlesim_node', name='turtlesim_node', output='screen'
+    tf_broadcaster_dynamic = launch_ros.actions.Node(
+        package='demo_python_pkg',
+        executable='tf_broadcaster_dynamic',
+        output='log',
     )
-    # 2. 给日志输出和服务调用添加条件
-    action_executeprocess = launch.actions.ExecuteProcess(
-        condition=IfCondition(spawn_turtle),
-        cmd=['ros2', 'service', 'call', '/spawn', 'turtlesim/srv/Spawn', '{x: 10, y: 10}']
+    tf_listener = launch_ros.actions.Node(
+        package='demo_python_pkg',
+        executable='tf_listener',
+        output='log',
     )
-    action_log_info = launch.actions.LogInfo(
-        condition=IfCondition(spawn_turtle),
-        msg='使用executeprocess来调用服务生成海龟'
-    )
-    # 3 利用定时器动作实现依次启动
-    action_group = launch.actions.GroupAction([
-        launch.actions.TimerAction(period=2.0, actions=[action_log_info]),
-        launch.actions.TimerAction(period=3.0, actions=[action_executeprocess]),
-    ])
-    # 4. 合成启动描述并返回
-    launch_description = launch.LaunchDescription([
-        declare_spawn_turtle,
-        action_turtlesim,
-        action_executeprocess,
-        action_log_info
-        # action_group
-    ])
 
+    launch_description = launch.LaunchDescription([tf_broadcaster_static, tf_broadcaster_dynamic, tf_listener])
     return launch_description
+
+    # # 功能三： 结合替换来学习条件
+    # # 1. 声明参数，是否创建新的海龟
+    # declare_spawn_turtle = launch.actions.DeclareLaunchArgument(
+    #     'spawn_turtle', default_value='false', description='是否生成海龟(true/false)'
+    # )
+    # spawn_turtle = launch.substitutions.LaunchConfiguration('spawn_turtle')
+    # print(f'spawn_turtle {spawn_turtle} {IfCondition(spawn_turtle)}')
+    # action_turtlesim = launch_ros.actions.Node(
+    #     package='turtlesim', executable='turtlesim_node', name='turtlesim_node', output='screen'
+    # )
+    # # 2. 给日志输出和服务调用添加条件
+    # action_executeprocess = launch.actions.ExecuteProcess(
+    #     condition=IfCondition(spawn_turtle),
+    #     cmd=['ros2', 'service', 'call', '/spawn', 'turtlesim/srv/Spawn', '{x: 10, y: 10}']
+    # )
+    # action_log_info = launch.actions.LogInfo(
+    #     condition=IfCondition(spawn_turtle),
+    #     msg='使用executeprocess来调用服务生成海龟'
+    # )
+    # # 3 利用定时器动作实现依次启动
+    # action_group = launch.actions.GroupAction([
+    #     launch.actions.TimerAction(period=2.0, actions=[action_log_info]),
+    #     launch.actions.TimerAction(period=3.0, actions=[action_executeprocess]),
+    # ])
+    # # 4. 合成启动描述并返回
+    # launch_description = launch.LaunchDescription([
+    #     declare_spawn_turtle,
+    #     action_turtlesim,
+    #     action_executeprocess,
+    #     action_log_info
+    #     # action_group
+    # ])
+
+    # return launch_description
     # # 功能二: 包含其他launch文件，执行命令行，输出日志，使用GroupAction封装成组合
     # # 1. 利用IncludeLaunchDescription 动作包含其他launch文件
     # action_include_ launch = launch.actions.IncludeLaunchDescription(
