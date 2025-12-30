@@ -33,6 +33,7 @@ setup(
             'learn_face_detect = demo_python_pkg.learn_face_detect:main',
             'face_detect_node = demo_python_pkg.face_detect_node:main',
             'face_detect_client_node = demo_python_pkg.face_detect_client_node:main',
+            'static_tf_broadcaster = demo_python_pkg.static_tf_broadcaster:main',
         ],
     },
 )
