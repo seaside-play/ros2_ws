@@ -32,9 +32,11 @@ def generate_launch_description():
         executable='joint_state_publisher'
     )
     # RViz节点
+    default_rviz_config_path = urdf_tutorial_path + '/config/rviz/first_robot_urdf_display_model.rviz'
     rviz_node = launch_ros.actions.Node(
         package='rviz2',
-        executable='rviz2'
+        executable='rviz2',
+        arguments =['-d', default_rviz_config_path]
     )
     return launch.LaunchDescription([
         action_declare_arg_mode_path,
