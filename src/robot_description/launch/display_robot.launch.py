@@ -7,7 +7,11 @@ from launch.substitutions import Command, LaunchConfiguration
 def generate_launch_description():
     # 获取默认路径
     urdf_tutorial_path = get_package_share_directory('robot_description')
-    default_model_path = urdf_tutorial_path + '/urdf/first_robot.urdf'
+    # 20260102. 002：使用xacro替代urdf
+    # default_model_path = urdf_tutorial_path + '/urdf/first_robot.urdf'
+    # default_model_path = urdf_tutorial_path + '/urdf/first_robot.urdf.xacro'
+    default_model_path = urdf_tutorial_path + '/urdf/fishbot/fishbot.urdf.xacro'
+    # 20260102. End
     # 为launch声明参数
     # 1. 定义可配置参数（对应 LaunchConfiguration('model')）
     action_declare_arg_mode_path = launch.actions.DeclareLaunchArgument(
@@ -15,10 +19,21 @@ def generate_launch_description():
     )
     # 获取文件内容生成新的参数
     # 2. 你的核心代码：构建 robot_description 参数值
+    # 20260102. 001：使用xacro替代urdf
+    # robot_description = launch_ros.parameter_descriptions.ParameterValue(
+    #     launch.substitutions.Command(['cat ', launch.substitutions.LaunchConfiguration('model')]),
+    #     value_type=str
+    # )
+    model_path = launch.substitutions.LaunchConfiguration('model')
+    # print(f"model_path {model_path}")
     robot_description = launch_ros.parameter_descriptions.ParameterValue(
-        launch.substitutions.Command(['cat ', launch.substitutions.LaunchConfiguration('model')]),
+        # launch.substitutions.Command(['xacro', launch.substitutions.LaunchConfiguration('model')]),
+        launch.substitutions.Command(['xacro ', model_path]),
         value_type=str
     )
+    # ros2 launch robot_description display_robot.launch.py model:=./../first_robot_urdf.xacro
+    # 20260102. End
+
     # 状态发布节点
     # 3. 发布 robot_description 参数（机器人状态发布节点，必须）
     robot_state_publisher_node = launch_ros.actions.Node(
@@ -36,7 +51,9 @@ def generate_launch_description():
     rviz_node = launch_ros.actions.Node(
         package='rviz2',
         executable='rviz2',
-        arguments =['-d', default_rviz_config_path]
+        arguments =['-d', default_rviz_config_path] # 传递命令行参数，读取rviz的配置信息
+        # 也可通过命令行启动RViz并指定配置文件，效果是一样的
+        # rviz2 -d first_robot_urdf_display_model.rviz
     )
     return launch.LaunchDescription([
         action_declare_arg_mode_path,
