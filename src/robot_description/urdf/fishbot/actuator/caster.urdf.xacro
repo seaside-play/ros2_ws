@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="caster_xacro" params="caster_name xyz">
+        <!--  声明一个万向轮的原点坐标、几何形状大小、材料颜色 -->
+        <link name="${caster_name}_caster_link">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <sphere radius="0.016" />
+                </geometry>
+                <material name="yellow">
+                    <color rgba="1.0 1.0 0.0 0.8" />
+                </material>
+            </visual>
+        </link>
+
+        <!-- 声明万向轮与本体的连接方式，origin和axis都以parent为基坐标 -->
+        <joint name="${caster_name}_caster_joint" type="fixed">
+            <parent link="base_link" />
+            <child link="${caster_name}_caster_link" />
+            <!-- 指定xyz的坐标，都是基于本地的坐标描述 -->
+            <origin xyz="${xyz}" /> 
+            <axis xyz="0 0 0" />
+        </joint>
+    </xacro:macro>
+</robot>
