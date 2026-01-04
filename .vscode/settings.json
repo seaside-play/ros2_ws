@@ -1,7 +1,6 @@
 {
     "files.exclude": {
         "**/build": true,
-        "**/log": true,
         "**/bag": true,
         "**/rviz_config": true,
     },
