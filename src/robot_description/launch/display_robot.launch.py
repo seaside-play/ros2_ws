@@ -51,7 +51,11 @@ def generate_launch_description():
     rviz_node = launch_ros.actions.Node(
         package='rviz2',
         executable='rviz2',
-        arguments =['-d', default_rviz_config_path] # 传递命令行参数，读取rviz的配置信息
+        arguments =['-d', default_rviz_config_path], # 传递命令行参数，读取rviz的配置信息
+        # parameters=[{
+        #     'message_filter_queue_size': 10000  # 配置队列容量
+        # }]
+        # arguments =['-d', default_rviz_config_path, '--ros-args', '-p', 'message_filter_queue_size:=1000'] # 传递命令行参数，读取rviz的配置信息
         # 也可通过命令行启动RViz并指定配置文件，效果是一样的
         # rviz2 -d first_robot_urdf_display_model.rviz
     )
