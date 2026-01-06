@@ -40,9 +40,22 @@ def generate_launch_description():
         arguments=['-topic', '/robot_description', '-entity', robot_name_in_model, ]
     )
 
+    # 加载并激活 fishbot_joint_state_broadcaster 控制器
+    load_joint_state_controller = launch.actions.ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'fishbot_joint_state_broadcaster'],
+        output='screen'
+    )
+
     return launch.LaunchDescription([
         action_declare_arg_model_path,
         robot_state_publisher_node,
         launch_gazebo,
-        spawn_entity_node
+        spawn_entity_node,
+        # 事件动作，当加载机器人结束后执行
+        launch.actions.RegisterEventHandler(
+            event_handler=launch.event_handlers.OnProcessExit(
+                target_action=spawn_entity_node,
+                on_exit=[load_joint_state_controller],
+            )
+        )
     ])

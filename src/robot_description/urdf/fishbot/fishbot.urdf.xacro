@@ -18,7 +18,7 @@
     <xacro:include filename="$(find robot_description)/urdf/fishbot/actuator/caster.urdf.xacro" />
 
     <!-- Gazebo插件 -->
-    <xacro:include filename="$(find robot_description)/urdf/fishbot/plugins/gazebo_control_plugin.xacro" />
+    <!-- <xacro:include filename="$(find robot_description)/urdf/fishbot/plugins/gazebo_control_plugin.xacro" /> -->
 
     <!-- 激光雷达传感器 -->
     <xacro:include filename="$(find robot_description)/urdf/fishbot/plugins/gazebo_sensor_plugin.xacro" />
@@ -28,7 +28,12 @@
     <xacro:wheel_xacro wheel_name="right" xyz="0 -0.10 -0.06 " />
     <xacro:caster_xacro caster_name="front" xyz="0.08 0.0 -0.076" />
     <xacro:caster_xacro caster_name="back" xyz="-0.08 0.0 -0.076" />
-    <xacro:gazebo_control_plugin />
+
+    <!-- Gazebo两轮差速插件控制硬件与ros2_control控制硬件冲突，此处需要注释掉 -->
+    <!-- <xacro:gazebo_control_plugin /> -->
     <xacro:gazebo_sensor_plugin />
     
+    <xacro:include filename="$(find robot_description)/urdf/fishbot/fishbot.ros2_control.xacro" />
+    <xacro:fishbot_ros2_control />
+
 </robot>
