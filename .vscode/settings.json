@@ -11,5 +11,19 @@
     "python.analysis.extraPaths": [
         "/opt/ros/humble/lib/python3.10/site-packages",
         "/opt/ros/humble/local/lib/python3.10/dist-packages"
-    ]
+    ],
+    // 其他VS Code配置（如字体、主题）保留，新增以下内容
+    "xml.schemaAssociations": {
+        // URDF文件关联URDF Schema
+        "*.urdf": "https://github.com/ros/urdfdom/blob/rolling/xsd/urdf.xsd",
+        // Xacro文件关联URDF Schema（Xacro是URDF的扩展，共用Schema）
+        "*.xacro": "https://github.com/ros/urdfdom/blob/rolling/xsd/urdf.xsd",
+        // ROS 1 Launch文件关联Launch Schema
+        "*.launch": "https://raw.githubusercontent.com/ros/roslaunch/master/src/roslaunch/xsd/roslaunch.xsd",
+        // ROS 2 Launch文件（.launch.xml）关联Schema（可选）
+        "*.launch.xml": "https://raw.githubusercontent.com/ros2/launch/rolling/launch/schema/launch.xsd"
+    },
+    // 可选：开启XML自动格式化（保存时自动对齐代码）
+    "editor.formatOnSave": true,
+    "xml.format.enabled": true
 }
