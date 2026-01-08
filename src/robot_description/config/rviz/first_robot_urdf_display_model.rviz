@@ -93,7 +93,7 @@ Visualization Manager:
           Value: true
         imu_link:
           Value: true
-      Marker Scale: 1
+      Marker Scale: 0.2
       Name: TF
       Show Arrows: true
       Show Axes: true
