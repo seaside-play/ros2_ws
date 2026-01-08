@@ -90,7 +90,7 @@
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
     <model name='room'>
-      <pose>0.765 -3.9175 0 0 -0 0</pose>
+      <pose>-1.41942 -0.679126 0 0 -0 0</pose>
       <link name='Wall_0'>
         <collision name='Wall_0_Collision'>
           <geometry>
@@ -589,7 +589,7 @@
       <static>1</static>
     </model>
     <model name='unit_cylinder'>
-      <pose>3.07477 -2.22292 0.5 0 -0 0</pose>
+      <pose>2.25915 0.496395 0.5 0 -0 0</pose>
       <link name='link'>
         <inertial>
           <mass>1</mass>
@@ -644,10 +644,10 @@
       </link>
     </model>
     <state world_name='default'>
-      <sim_time>241 937000000</sim_time>
-      <real_time>244 714552421</real_time>
-      <wall_time>1767432046 846670630</wall_time>
-      <iterations>241937</iterations>
+      <sim_time>141 491000000</sim_time>
+      <real_time>143 61685109</real_time>
+      <wall_time>1767837853 884592706</wall_time>
+      <iterations>141491</iterations>
       <model name='ground_plane'>
         <pose>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -659,80 +659,80 @@
         </link>
       </model>
       <model name='room'>
-        <pose>0 0 0 0 -0 0</pose>
+        <pose>-0.5832 -0.575494 0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='Wall_0'>
-          <pose>0.765 -0.91 0 0 -0 0</pose>
+          <pose>-0.5832 2.43201 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_1'>
-          <pose>5.69 -4.335 0 0 0 -1.5708</pose>
+          <pose>4.3418 -0.992994 0 0 0 -1.5708</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_10'>
-          <pose>-1.03475 -5.87649 0 0 0 -1.5708</pose>
+          <pose>-2.38295 -2.53448 0 0 0 -1.5708</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_12'>
-          <pose>1.11227 -6.43802 0 0 -0 1.5708</pose>
+          <pose>-0.235933 -3.09601 0 0 -0 1.5708</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_13'>
-          <pose>1.11227 -5.13802 0 0 -0 0</pose>
+          <pose>-0.235933 -1.79601 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_14'>
-          <pose>2.78727 -5.13802 0 0 -0 0</pose>
+          <pose>1.43907 -1.79601 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_2'>
-          <pose>0.765 -7.76 0 0 -0 3.14159</pose>
+          <pose>-0.5832 -4.41799 0 0 -0 3.14159</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_3'>
-          <pose>-4.16 -4.335 0 0 -0 1.5708</pose>
+          <pose>-5.5082 -0.992994 0 0 -0 1.5708</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_6'>
-          <pose>0.23016 -2.3495 0 0 0 -1.5708</pose>
+          <pose>-1.11804 0.992506 0 0 0 -1.5708</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_7'>
-          <pose>-1.44484 -3.7745 0 0 -0 3.14159</pose>
+          <pose>-2.79304 -0.432491 0 0 -0 3.14159</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_9'>
-          <pose>-2.58475 -5.07649 0 0 -0 0</pose>
+          <pose>-3.93295 -1.73448 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
       <model name='unit_cylinder'>
-        <pose>3.07477 -2.22292 0.499997 3e-06 4e-06 -0</pose>
+        <pose>2.25915 0.496393 0.499997 3e-06 4e-06 -0</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>3.07477 -2.22292 0.499997 3e-06 4e-06 -0</pose>
+          <pose>2.25915 0.496393 0.499997 3e-06 4e-06 -0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
@@ -744,7 +744,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>1.47586 -12.0551 15.5881 0 1.10764 1.67619</pose>
+        <pose>2.61034 -2.49137 26.8025 -1e-06 1.5578 1.46814</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
