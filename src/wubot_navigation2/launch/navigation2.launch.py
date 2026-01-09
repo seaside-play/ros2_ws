@@ -8,8 +8,9 @@ def generate_launch_description():
     # 获取与拼接默认路径
     wubot_navigation2_dir = get_package_share_directory('wubot_navigation2')
     nav2_bringup_dir = get_package_share_directory('nav2_bringup')
-    rviz_config_dir = os.path.join(nav2_bringup_dir, 'rviz2', 'nav2_default_view.rviz')
+    rviz_config_dir = os.path.join(nav2_bringup_dir, 'rviz', 'nav2_default_view.rviz')
     
+    # 初始化某一个参数的配置信息的对象
     use_sim_time = launch.substitutions.LaunchConfiguration('use_sim_time', default='true')
     map_yaml_path = launch.substitutions.LaunchConfiguration(
         'map', default=os.path.join(wubot_navigation2_dir, 'maps', 'room.yaml')
@@ -19,7 +20,7 @@ def generate_launch_description():
     )
 
     return launch.LaunchDescription([
-        # 声明新的launch参数
+        # 声明新的launch参数，有这三个参数，若不声明，LaunchDescription就不能使用这些参数，而真正的参数值有LaunchConfiguration定义
         launch.actions.DeclareLaunchArgument('use_sim_time', default_value=use_sim_time, description='Use sim-time Clock if true'),
         launch.actions.DeclareLaunchArgument('map', default_value=map_yaml_path, description='full path to map file to load'),
         launch.actions.DeclareLaunchArgument('params_file', default_value=nav2_param_path, description='Full path to param file to load'),
