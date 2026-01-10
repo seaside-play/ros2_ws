@@ -2,6 +2,7 @@
     "files.exclude": {
         "**/build": true,
         "**/bag": true,
+        "**/log": true,
         "**/rviz_config": true,
     },
     "python.autoComplete.extraPaths": [
