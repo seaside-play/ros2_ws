@@ -30,6 +30,7 @@ setup(
             'init_robot_pose = wubot_application.init_robot_pose:main',
             'get_robot_pose = wubot_application.get_robot_pose:main',
             'nav_to_pose = wubot_application.nav_to_pose:main',
+            'waypoint_follow = wubot_application.waypoint_follow:main',
         ],
     },
 )
