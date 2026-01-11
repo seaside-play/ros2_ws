@@ -1,4 +1,5 @@
 from setuptools import find_packages, setup
+import os
 
 package_name = 'autopatrol_robot'
 
@@ -6,11 +7,12 @@ setup(
     name=package_name,
     version='0.0.0',
     packages=find_packages(exclude=['test']),
-    # data_files下的文件会不复制到指定目录下
+    # data_files下的文件会不复制到指定目录下，指的是数据文件
     data_files=[
         ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + "/config", ['config/patrol_config.yaml']),
+        (os.path.join('share', package_name, 'launch'), ['launch/autopatrol.launch.py']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -25,7 +27,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'patrol_node=autopatrol_robot.patrol_node:main',
+            'patrol_node = autopatrol_robot.patrol_node:main',
+            'speaker = autopatrol_robot.speaker:main',
         ],
     },
 )

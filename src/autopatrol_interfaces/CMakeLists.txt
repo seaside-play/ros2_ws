@@ -22,7 +22,7 @@ if(BUILD_TESTING)
 endif()
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-  "srv/SpeachText.srv"
+  "srv/SpeechText.srv"
 )
 
 ament_package()
