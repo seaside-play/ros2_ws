@@ -5,6 +5,10 @@ from tf2_ros import TransformListener, Buffer
 from tf_transformations import euler_from_quaternion, quaternion_from_euler
 from rclpy.duration import Duration
 from autopatrol_interfaces.srv import SpeechText
+# 导入消息接口和相关接口
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+import cv2
 
 class PatrolNode(BasicNavigator):
     def __init__(self, node_name='patrol_node'):
@@ -21,6 +25,13 @@ class PatrolNode(BasicNavigator):
 
         # 语音合成客户端
         self.speech_client_ = self.create_client(SpeechText, 'speech_text')
+
+        # 订阅与保存图像相关定义
+        self.declare_parameter('image_save_path', '')
+        self.image_save_path_ = self.get_parameter('image_save_path').value
+        self.bridge_ = CvBridge()
+        self.latest_image_= None
+        self.subscription_image_ = self.create_subscription(Image, '/camera_sensor/image_raw', self.image_callback, 10)
 
     # 通过x, y, yaw合成PostStamped
     def get_pose_by_xyyaw(self, x, y, yaw):
@@ -113,6 +124,17 @@ class PatrolNode(BasicNavigator):
         else:
             self.get_logger().warn('语音合成服务请求失败')
 
+    # 将最新的消息放到latest_image中
+    def image_callback(self, msg):
+        self.latest_image_ = msg
+
+    # 记录图像
+    def record_image(self):
+        if self.latest_image_ is not None:
+            pose = self.get_current_pose()
+            cv_image = self.bridge_.imgmsg_to_cv2(self.latest_image_)
+            # x:3.2f 表示总长度3，小数点后2位
+            cv2.imwrite(f'{self.image_save_path_}image_{pose.translation.x:3.2f}_{pose.translation.y:3.2f}.png', cv_image)
 
 def main():
     rclpy.init()
@@ -128,4 +150,9 @@ def main():
             target_pose = patrol_node.get_pose_by_xyyaw(x, y, yaw)
             patrol_node.speech_text(f'准备前往目标点{x}, {y}')
             patrol_node.nav_to_pose(target_pose)
+            
+            # 记录图像
+            patrol_node.speech_text(f'已到目标点{x}, {y}, 准备记录图像')
+            patrol_node.record_image()
+            patrol_node.speech_text('图像保存完成')
     rclpy.shutdown()
