@@ -12,6 +12,7 @@
                     <color rgba="1.0 1.0 1.0 0.5" />
                 </material>
             </visual>
+            <!-- 碰撞属性 -->
             <collision>
                 <origin xyz="0 0 0" rpy="0 0 0" />
                 <geometry>

@@ -31,7 +31,13 @@ class PatrolNode(BasicNavigator):
         self.image_save_path_ = self.get_parameter('image_save_path').value
         self.bridge_ = CvBridge()
         self.latest_image_= None
+        # 订阅摄像头图像话题，获取最新图像数据，并在回调函数中保存到latest_image_变量中，以便后续使用。
+        # 只要订阅了，就会一直回调处理。
         self.subscription_image_ = self.create_subscription(Image, '/camera_sensor/image_raw', self.image_callback, 10)
+
+    # 将最新的消息放到latest_image中
+    def image_callback(self, msg):
+        self.latest_image_ = msg
 
     # 通过x, y, yaw合成PostStamped
     def get_pose_by_xyyaw(self, x, y, yaw):
@@ -40,7 +46,7 @@ class PatrolNode(BasicNavigator):
         pose.header.stamp = self.get_clock().now().to_msg()
         pose.pose.position.x = x
         pose.pose.position.y = y
-        rotation_quat = quaternion_from_euler(0, 0, yaw)
+        rotation_quat = quaternion_from_euler(0, 0, yaw) # roll, pitch, yaw
         pose.pose.orientation.x = rotation_quat[0]
         pose.pose.orientation.y = rotation_quat[1]
         pose.pose.orientation.z = rotation_quat[2]
@@ -53,9 +59,10 @@ class PatrolNode(BasicNavigator):
         self.setInitialPose(self.get_pose_by_xyyaw(self.initial_point_[0],
                                                    self.initial_point_[1],
                                                    self.initial_point_[2]))
-        self.waitUntilNav2Active()
+        self.waitUntilNav2Active() # 等待 Nav2 导航系统完全启动、准备就绪，直到可以接收目标点 
+                                   # 大白话：“等导航准备好，我再往下执行！
  
-    # 通过参数值获取目标点集合
+    # 准备获取所有的目标点数据，通过参数值获取目标点集合，之后再逐一对数据进行解析和使用。
     def get_target_points(self):
         points = []
         self.target_points_ = self.get_parameter('target_points').value
@@ -67,13 +74,14 @@ class PatrolNode(BasicNavigator):
             self.get_logger().info(f'获取目标点：{index} -> ({x}, {y}, {yaw})')
         return points
 
-    # 导航到指定位姿
+    # 导航到指定位姿，执行一次导航，并获得结果
     def nav_to_pose(self, target_pose):
-        self.waitUntilNav2Active()
+        self.waitUntilNav2Active() # 在正式导航前，需要等待nav2激活。
         result = self.goToPose(target_pose)
         while not self.isTaskComplete():
             feedback = self.getFeedback()
             if feedback:
+                # Duration.from_msg： 把 ROS 消息格式的时间数据，转换成程序能用的 Duration 时长对象。
                 self.get_logger().info(f'预计:{Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9} s 到达')
         # 最终结果判断
         result = self.getResult()
@@ -86,26 +94,6 @@ class PatrolNode(BasicNavigator):
         else:
             self.get_logger().error('导航结果:返回状态无效')
 
-    # 通过TF获取当前位姿
-    def get_current_pose(self):
-        while rclpy.ok():
-            try:
-                tf = self.buffer_.lookup_transform('map', 
-                                                   'base_footprint', 
-                                                   rclpy.time.Time(seconds=0),
-                                                   rclpy.time.Duration(seconds=1))
-                transform = tf.transform
-                rotation_euler = euler_from_quaternion([
-                    transform.rotation.x,
-                    transform.rotation.y,
-                    transform.rotation.z,
-                    transform.rotation.w
-                ])
-                self.get_logger().info(f'平移:{transform.translation}, 旋转四元数:{transform.rotation}, 旋转欧拉角:{rotation_euler}')
-                return transform
-            except Exception as e:
-                self.get_logger().warn(f'不能够获取坐标变换，原因{str(e)}')
-        
     # 调用服务播放语音
     def speech_text(self, text):
         while not self.speech_client_.wait_for_service(timeout_sec=1.0):
@@ -124,18 +112,36 @@ class PatrolNode(BasicNavigator):
         else:
             self.get_logger().warn('语音合成服务请求失败')
 
-    # 将最新的消息放到latest_image中
-    def image_callback(self, msg):
-        self.latest_image_ = msg
-
     # 记录图像
     def record_image(self):
         if self.latest_image_ is not None:
-            pose = self.get_current_pose()
+            pose = self.get_current_pose() 
+            # imgmsg_to_cv2 把 ROS 图像消息（sensor_msgs/Image）转换成 OpenCV 能处理的图像格式（cv::Mat）
             cv_image = self.bridge_.imgmsg_to_cv2(self.latest_image_)
             # x:3.2f 表示总长度3，小数点后2位
             cv2.imwrite(f'{self.image_save_path_}image_{pose.translation.x:3.2f}_{pose.translation.y:3.2f}.png', cv_image)
 
+    # 通过TF获取当前位姿
+    def get_current_pose(self):
+        while rclpy.ok():
+            try:
+                # 获取从地图 map 坐标系 到 机器人底盘 base_footprint 坐标系的坐标变换（也就是机器人在地图里的实时位置 + 朝向）。
+                tf = self.buffer_.lookup_transform('map',  # 目标坐标系（我要转到哪里）， 我想得到 相对于地图 的位置
+                                                   'base_footprint',  # # 源坐标系（从哪里开始转）
+                                                   rclpy.time.Time(seconds=0), # 查询哪个时间的坐标变换
+                                                   rclpy.time.Duration(seconds=1)) # 最多等多久
+                transform = tf.transform
+                rotation_euler = euler_from_quaternion([
+                    transform.rotation.x,
+                    transform.rotation.y,
+                    transform.rotation.z,
+                    transform.rotation.w
+                ])
+                self.get_logger().info(f'平移:{transform.translation}, 旋转四元数:{transform.rotation}, 旋转欧拉角:{rotation_euler}')
+                return transform
+            except Exception as e:
+                self.get_logger().warn(f'不能够获取坐标变换，原因{str(e)}')
+        
 def main():
     rclpy.init()
     patrol_node = PatrolNode()
