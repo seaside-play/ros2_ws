@@ -15,10 +15,15 @@ def generate_launch_description():
     )
     nav_to_pose = launch_ros.actions.Node(
         package='wubot_application',
-        executable='get_robot_pose',
+        executable='nav_to_pose',
+    )
+    waypoint_follow = launch_ros.actions.Node(
+        package='wubot_application',
+        executable='waypoint_follow',
     )
     return launch.LaunchDescription([
         init_robot_pose,
         # get_robot_node,
-        nav_to_pose,
+        # nav_to_pose,
+        waypoint_follow,
     ])
