@@ -1,0 +1,11 @@
+<!-- library定义一个库，path指定库的路径，其实就是动态库的名字 -->
+<library path="spin_motion_controller">
+    <!-- 子标签class指定插件类的名字，类和抽象基类 -->
+    <class name="motion_control_system/SpinMotionController"
+        type="motion_control_system::SpinMotionController"
+        base_class_type="motion_control_system::MotionController">
+        <description>
+            A motion controller that makes the robot spin in place.
+        </description>
+    </class>
+</library>
