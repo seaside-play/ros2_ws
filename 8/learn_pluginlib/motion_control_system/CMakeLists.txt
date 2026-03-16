@@ -23,6 +23,11 @@ install(DIRECTORY include/ DESTINATION include/)
 # 导出插件描述文件
 pluginlib_export_plugin_description_file(motion_control_system spin_motion_plugins.xml)
 
+# === 添加测试代码
+add_executable(test_plugin src/test_plugin.cpp)
+ament_target_dependencies(test_plugin pluginlib)
+install(TARGETS test_plugin DESTINATION lib/${PROJECT_NAME})
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights

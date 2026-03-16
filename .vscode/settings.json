@@ -2,7 +2,7 @@
     "files.exclude": {
         "**/build": true,
         "**/bag": true,
-        "**/install": true,
+        // "**/install": true,
 
         "**/log": true,
         "**/rviz_config": true,

@@ -4,4 +4,5 @@ log/
 src/demo_python_pkg/test/
 src/wubot_application/test/
 src/**/test/
+**/.cache/
 
